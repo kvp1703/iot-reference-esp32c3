@@ -104,9 +104,9 @@
  * download image should be higher than the current version, otherwise the new image is
  * rejected in self test phase.
  */
-#define APP_VERSION_MAJOR                     ( CONFIG_GRI_OTA_DEMO_APP_VERSION_MAJOR )
-#define APP_VERSION_MINOR                     ( CONFIG_GRI_OTA_DEMO_APP_VERSION_MINOR )
-#define APP_VERSION_BUILD                     ( CONFIG_GRI_OTA_DEMO_APP_VERSION_BUILD )
+#define APP_VERSION_MAJOR    ( CONFIG_GRI_OTA_DEMO_APP_VERSION_MAJOR )
+#define APP_VERSION_MINOR    ( CONFIG_GRI_OTA_DEMO_APP_VERSION_MINOR )
+#define APP_VERSION_BUILD    ( CONFIG_GRI_OTA_DEMO_APP_VERSION_BUILD )
 
 /* *INDENT-OFF* */
     #ifdef __cplusplus
