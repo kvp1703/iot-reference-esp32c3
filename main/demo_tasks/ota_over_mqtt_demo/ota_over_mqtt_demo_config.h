@@ -90,6 +90,15 @@
 #define otademoconfigDEMO_TASK_STACK_SIZE     ( CONFIG_GRI_OTA_DEMO_DEMO_TASK_STACK_SIZE )
 
 /**
+ * @brief The number of data buffers reserved by the OTA agent.
+ *
+ * This configurations parameter sets the maximum number of static data buffers used by
+ * the OTA agent for job and file data blocks received.
+ */
+#define otaconfigMAX_NUM_OTA_DATA_BUFFERS     ( CONFIG_GRI_OTA_DEMO_MAX_NUM_OTA_DATA_BUFFERS )
+
+
+/**
  * @brief The version for the firmware which is running. OTA agent uses this
  * version number to perform anti-rollback validation. The firmware version for the
  * download image should be higher than the current version, otherwise the new image is

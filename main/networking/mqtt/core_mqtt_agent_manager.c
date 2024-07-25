@@ -586,6 +586,10 @@ static MQTTStatus_t prvCoreMqttAgentInit( NetworkContext_t * pxNetworkContext )
     xTransport.send = espTlsTransportSend;
     xTransport.recv = espTlsTransportRecv;
 
+    /*Set TLS timeout*/
+    vTlsSetConnectTimeout( 4000 );
+    vTlsSetRecvTimeout( 100 );
+
     /* Initialize MQTT library. */
     xReturn = MQTTAgent_Init( &xGlobalMqttAgentContext,
                               &xMessageInterface,
