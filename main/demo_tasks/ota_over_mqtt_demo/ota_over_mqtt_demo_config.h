@@ -41,11 +41,6 @@
 /* *INDENT-ON* */
 
 /**
- * @brief The thing name of the device.
- */
-#define otademoconfigCLIENT_IDENTIFIER           ( CONFIG_GRI_THING_NAME )
-
-/**
  * @brief The maximum size of the file paths used in the demo.
  */
 #define otademoconfigMAX_FILE_PATH_SIZE          ( CONFIG_GRI_OTA_DEMO_MAX_FILE_PATH_SIZE )
@@ -103,6 +98,9 @@
 #define APP_VERSION_MAJOR                        ( CONFIG_GRI_OTA_DEMO_APP_VERSION_MAJOR )
 #define APP_VERSION_MINOR                        ( CONFIG_GRI_OTA_DEMO_APP_VERSION_MINOR )
 #define APP_VERSION_BUILD                        ( CONFIG_GRI_OTA_DEMO_APP_VERSION_BUILD )
+
+/* Sets the thingname */
+void otademoconfigSetClientIdentifier(const char *client_id);
 
 /* *INDENT-OFF* */
     #ifdef __cplusplus

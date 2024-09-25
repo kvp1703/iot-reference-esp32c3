@@ -173,6 +173,16 @@
  */
 #define MAX_UINT32                                       ( 0xffffffff )
 
+/**
+ * @brief The thing name of the device.
+ */
+static char* otademoconfigCLIENT_IDENTIFIER = CONFIG_GRI_THING_NAME;
+
+void otademoconfigSetClientIdentifier(const char *client_id)
+{
+    otademoconfigCLIENT_IDENTIFIER = client_id;
+}
+
 /* Struct definitions *********************************************************/
 
 /**

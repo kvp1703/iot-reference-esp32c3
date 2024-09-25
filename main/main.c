@@ -55,6 +55,12 @@
 /* WiFi provisioning/connection handler include. */
 #include "app_wifi.h"
 
+/* OTA demo and MQTT config include. */
+#ifdef CONFIG_APP_USE_DEVICE_CERT_COMMON_NAME
+    #include "ota_over_mqtt_demo_config.h"
+    #include "core_mqtt_agent_manager_config.h"
+#endif
+
 /* Demo includes. */
 #if CONFIG_GRI_ENABLE_SUB_PUB_UNSUB_DEMO
     #include "sub_pub_unsub_demo.h"
@@ -140,6 +146,7 @@ static BaseType_t prvInitializeNetworkContext( void )
         xRet = pdFAIL;
     }
 
+#ifndef CONFIG_APP_USE_DEVICE_CERT_COMMON_NAME
     if( strlen( CONFIG_GRI_THING_NAME ) == 0 )
     {
         ESP_LOGE( TAG, "Empty thingname for MQTT broker. Set thing name by "
@@ -147,6 +154,7 @@ static BaseType_t prvInitializeNetworkContext( void )
                        "Thing name." );
         xRet = pdFAIL;
     }
+#endif
 
     /* Initialize network context. */
 
@@ -308,6 +316,65 @@ static void prvStartEnabledDemos( void )
     #endif /* CONFIG_GRI_RUN_QUALIFICATION_TEST */
 }
 
+#ifdef CONFIG_APP_USE_DEVICE_CERT_COMMON_NAME
+#include "mbedtls/x509_crt.h"
+#include "mbedtls/oid.h"
+
+char * esp_get_client_cert()
+{
+    uint32_t client_cert_len = 0;
+    char *client_cert_addr = NULL;
+    if (esp_secure_cert_get_device_cert(&client_cert_addr, &client_cert_len) == ESP_OK) {
+        ESP_LOGI(TAG, "Obtained flash address of device cert");
+    } else {
+        ESP_LOGE(TAG, "Failed to obtain flash address of device cert");
+    }
+    return client_cert_addr;
+}
+
+size_t esp_get_client_cert_len()
+{
+    uint32_t client_cert_len = 0;
+    char *client_cert_addr = NULL;
+    if (esp_secure_cert_get_device_cert(&client_cert_addr, &client_cert_len) == ESP_OK) {
+        ESP_LOGI(TAG, "Obtain flash address of device cert");
+    } else {
+        ESP_LOGE(TAG, "Failed to obtain flash address of device cert");
+    }
+    return client_cert_len;
+}
+
+char* esp_populate_cn_from_cert()
+{
+    void *addr = NULL;
+    size_t len = 0;
+    addr = esp_get_client_cert();
+    if (addr) {
+        len = esp_get_client_cert_len();
+    } else {
+        ESP_LOGE(TAG, "Failed to get device certificate.");
+        return NULL;
+    }
+    mbedtls_x509_crt crt;
+    mbedtls_x509_crt_init(&crt);
+    char *node_id = NULL;
+    int ret = mbedtls_x509_crt_parse(&crt, addr, len);
+    if (ret != 0) {
+        ESP_LOGE(TAG, "Parsing of device certificate failed, returned %02X", ret);
+    } else {
+        mbedtls_asn1_named_data *cn_data;
+        cn_data = mbedtls_asn1_find_named_data(&crt.subject, MBEDTLS_OID_AT_CN,
+                                                MBEDTLS_OID_SIZE(MBEDTLS_OID_AT_CN));
+        if (cn_data) {
+            node_id = calloc(1, cn_data->val.len + 1);
+            memcpy(node_id, (const char *)cn_data->val.p, cn_data->val.len);
+        }
+    }
+    mbedtls_x509_crt_free(&crt);
+    return node_id;
+}
+#endif //CONFIG_APP_USE_DEVICE_CERT_COMMON_NAME
+
 /* Main function definition ***************************************************/
 
 /**
@@ -345,6 +412,10 @@ void app_main( void )
         ESP_ERROR_CHECK( nvs_flash_init() );
     }
 
+#ifdef CONFIG_APP_USE_DEVICE_CERT_COMMON_NAME
+    otademoconfigSetClientIdentifier(esp_populate_cn_from_cert());
+    coreMqttConfigSetClientIdentifier(esp_populate_cn_from_cert());
+#endif
     /* Initialize ESP-Event library default event loop.
      * This handles WiFi and TCP/IP events and this needs to be called before
      * starting WiFi and the coreMQTT-Agent network manager. */

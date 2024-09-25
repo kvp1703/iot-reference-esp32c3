@@ -41,11 +41,6 @@
 /* *INDENT-ON* */
 
 /**
- * @brief The thing name of the device.
- */
-#define configCLIENT_IDENTIFIER                         ( CONFIG_GRI_THING_NAME )
-
-/**
  * @brief The task stack size of the connection handling task.
  */
 #define configCONNECTION_TASK_STACK_SIZE                ( CONFIG_GRI_CONNECTION_TASK_STACK_SIZE )
@@ -105,6 +100,8 @@
  * @brief The task priority of the coreMQTT-Agent task.
  */
 #define configMQTT_AGENT_TASK_PRIORITY                  ( CONFIG_GRI_MQTT_AGENT_TASK_PRIORITY )
+
+void coreMqttConfigSetClientIdentifier(const char *client_id);
 
 /* *INDENT-OFF* */
     #ifdef __cplusplus

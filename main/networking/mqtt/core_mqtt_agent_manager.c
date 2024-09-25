@@ -149,6 +149,10 @@ static NetworkContext_t * pxNetworkContext;
  */
 static EventGroupHandle_t xNetworkEventGroup;
 
+/**
+ * @brief The thing name of the device.
+ */
+static char* configCLIENT_IDENTIFIER = CONFIG_GRI_THING_NAME;
 /* Static function declarations ***********************************************/
 
 /**
@@ -1101,4 +1105,9 @@ BaseType_t xCoreMqttAgentManagerStart( NetworkContext_t * pxNetworkContextIn )
     }
 
     return xRet;
+}
+
+void coreMqttConfigSetClientIdentifier(const char *client_id)
+{
+    configCLIENT_IDENTIFIER = client_id;
 }

@@ -1,4 +1,10 @@
 menu "Featured FreeRTOS IoT Integration"
+    config APP_USE_DEVICE_CERT_COMMON_NAME
+        bool "Use device certificate Common Name as MQTT client ID"
+        default n
+        help
+            Enables the use of the device certificate's Common Name as the MQTT client ID / Thingname.
+
     config APP_WIFI_PROV_SHOW_QR
         bool "Show provisioning QR code"
         default y

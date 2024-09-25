@@ -56,6 +56,7 @@ set(MAIN_REQUIRES
     FreeRTOS-Libraries-Integration-Tests
     unity
     driver
+    mbedtls
 )
 
 idf_component_register(
