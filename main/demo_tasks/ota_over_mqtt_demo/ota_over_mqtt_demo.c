@@ -826,7 +826,7 @@ static OtaPalJobDocProcessingResult_t receivedJobDocumentHandler( OtaJobEventDat
     bool parseJobDocument = false;
     bool handled = false;
     char * jobId;
-    const char ** jobIdptr = &jobId;
+    const char ** jobIdptr = (const char **) &jobId;
     size_t jobIdLength = 0U;
     OtaPalStatus_t palStatus;
     OtaPalJobDocProcessingResult_t xResult = OtaPalJobDocFileCreateFailed;
@@ -1304,6 +1304,7 @@ static void processOTAEvents( void )
                 case OtaAgentEventRequestFileBlock:
                 case OtaAgentEventReceivedFileBlock:
                     nextEvent.eventId = OtaAgentEventRequestFileBlock;
+                    /* Fall through */
 
                 case OtaAgentEventCloseFile:
                     nextEvent.eventId = OtaAgentEventActivateImage;

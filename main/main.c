@@ -155,7 +155,7 @@ static BaseType_t prvInitializeNetworkContext( void )
 
     /* Get the device certificate from esp_secure_crt_mgr and put into network
      * context. */
-    xEspErrRet = esp_secure_cert_get_device_cert( &xNetworkContext.pcClientCert,
+    xEspErrRet = esp_secure_cert_get_device_cert( ( char ** ) &xNetworkContext.pcClientCert,
                                                   &xNetworkContext.pcClientCertSize );
 
     if( xEspErrRet == ESP_OK )
@@ -208,7 +208,7 @@ static BaseType_t prvInitializeNetworkContext( void )
             xRet = pdFAIL;
         }
     #else /* if CONFIG_ESP_SECURE_CERT_DS_PERIPHERAL */
-        xEspErrRet = esp_secure_cert_get_priv_key( &xNetworkContext.pcClientKey,
+        xEspErrRet = esp_secure_cert_get_priv_key( ( char ** ) &xNetworkContext.pcClientKey,
                                                    &xNetworkContext.pcClientKeySize );
 
         if( xEspErrRet == ESP_OK )
